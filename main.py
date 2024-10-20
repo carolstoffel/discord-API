@@ -24,10 +24,6 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    # Don't respond to ourselves
-    if message.author == client.user:
-        return
-
     # Ensure that the message is not handled more than once
     if message.content.startswith('$usd'):
         # Log the message content to check if it's being processed more than once
@@ -46,6 +42,8 @@ async def on_message(message):
 
         logging.info(f"Sending cat fact {response.json()['fact']}")
         await message.channel.send(response.json()['fact'])
+    
+    await client.process_commands(message)
 
 webserver.keep_alive()
 client.run(discord_token)
